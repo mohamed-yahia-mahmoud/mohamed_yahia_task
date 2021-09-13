@@ -28,7 +28,68 @@ class _HomeState extends State<Home> {
   int index=0;
 
   HomeMobx con;
+/*
+  final List<Widget> imageSliders =  imgList.map((item) => Container(
+    child: Container(
+      height: 800,
+      margin: EdgeInsets.all(5.0),
+      child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+          child: Stack(
+            children: <Widget>[
+              Image.network(item, fit: BoxFit.cover, width: 1000.0),
+              Positioned(
+                top: 0.0,
+                left: 0.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(13),
 
+                    ),
+                    //padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal:8.0,vertical: 3),
+                      child: Text(
+                        'AVAILABLE',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+
+
+            ],
+          )
+      ),
+    ),
+  )).toList();
+*/
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+       con.getNewRequests(context: context);
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+     super.dispose();
+  }
 
   Widget build(BuildContext context) {
 
@@ -75,7 +136,7 @@ class _HomeState extends State<Home> {
             Stack(
                 children: [
                   CarouselSlider(
-                    items: imageSliders,
+                    items: con.imageSliders,
                     options: CarouselOptions(
                         autoPlay: true,
                         enlargeCenterPage: true,
@@ -258,6 +319,7 @@ class _HomeState extends State<Home> {
 
 }
 
+/*
 final List<Widget> imageSliders =  imgList.map((item) => Container(
   child: Container(
     height: 800,
@@ -301,3 +363,4 @@ final List<Widget> imageSliders =  imgList.map((item) => Container(
     ),
   ),
 )).toList();
+*/

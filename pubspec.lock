@@ -127,13 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
-  clippy_flutter:
-    dependency: "direct main"
-    description:
-      name: clippy_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.1"
   clock:
     dependency: transitive
     description:
@@ -183,6 +176,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.12"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.10"
   fake_async:
     dependency: transitive
     description:
@@ -216,20 +216,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_custom_clippers:
-    dependency: "direct main"
-    description:
-      name: flutter_custom_clippers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.2"
-  flutter_icons:
-    dependency: "direct main"
-    description:
-      name: flutter_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.1"
   flutter_mobx:
     dependency: "direct main"
     description:
@@ -237,20 +223,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0+2"
-  flutter_page_indicator:
-    dependency: transitive
-    description:
-      name: flutter_page_indicator
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.3"
-  flutter_swiper:
-    dependency: "direct main"
-    description:
-      name: flutter_swiper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.6"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -396,13 +368,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.3"
-  page_transition:
-    dependency: "direct main"
-    description:
-      name: page_transition
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.7+6"
   path:
     dependency: transitive
     description:
@@ -590,13 +555,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+3"
-  transformer_page_view:
-    dependency: transitive
+  toast:
+    dependency: "direct main"
     description:
-      name: transformer_page_view
+      name: toast
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.6"
+    version: "0.1.5"
   typed_data:
     dependency: transitive
     description:
