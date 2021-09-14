@@ -13,9 +13,13 @@ class GetAllProperitiesResponse{
    GetAllProperitiesResponse({
      this.data,
    });
+//
+//  factory GetAllProperitiesResponse.fromJson(List<dynamic> json)
+//  => _$GetAllProperitiesResponseFromJson(json);
 
+   GetAllProperitiesResponse.fromJson(List<dynamic> usersJson) :
+         data = usersJson.map((obj) => ProperityModel.fromJson(obj)).toList();
 
-  factory GetAllProperitiesResponse.fromJson(var json) => _$GetAllProperitiesResponseFromJson(json);
-  Map<String,dynamic> toJson() => _$GetAllProperitiesResponseToJson(this);
+ // Map<String,dynamic> toJson() => _$GetAllProperitiesResponseToJson(this);
 
 }

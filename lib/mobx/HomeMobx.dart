@@ -64,7 +64,7 @@ abstract class HomeMobx with Store {
 
   @observable
   List<String> myImgs = new List();
-/*
+
   @action
   Future<GetAllProperitiesResponse> newRequestsMethod(
       {  Function() doAfterSuccess, BuildContext context}) {
@@ -72,16 +72,16 @@ abstract class HomeMobx with Store {
     return client.get(url).then((http.Response response) {
      try{
         final data = json.decode(response.body);
-        getAllProperitiesResponse[0] = GetAllProperitiesResponse.fromJson(data);
+        getAllProperitiesResponse  = GetAllProperitiesResponse.fromJson(data);
 
           debugPrintSynchronously(encoder.convert(data));
           myProperties.clear();
-          myProperties.addAll(getAllProperitiesResponse[0].data);
-        print('${myProperties}');
+          myProperties.addAll(getAllProperitiesResponse .data);
+        print('yesss ${myProperties}');
 
         for(int i=0;i<myProperties.length;i++){
           myImgs.add(myProperties[i].image);
-          print('${myProperties[i].image}');
+          print('my images ${myProperties[i].image}');
         }
         imageSliders=myImgs.map((element) => MyPropertyItem).cast<Widget>().toList();
 
@@ -93,11 +93,8 @@ abstract class HomeMobx with Store {
 
       }
 
-      return getAllProperitiesResponse[0];
+      return getAllProperitiesResponse ;
     });
-
-
-
 
   }
 
@@ -114,44 +111,6 @@ abstract class HomeMobx with Store {
         });
 
   }
-*/
-
-  void dioGetNewProperties( BuildContext context)async{
-    try {
-      Dio dio = new Dio();
-      print("Get " + url );
-      var response = await dio.get(url);
-
-      if (response!=null&&response.statusCode==200)   {
-
-       print("my data  ${response.data }");
-      getAllProperitiesResponse  = GetAllProperitiesResponse.fromJson(response.data);
-      // myProperties  = GetAllProperitiesResponse.fromJson(response.data[0]);
-
-       print("my data  ${getAllProperitiesResponse .data}");
-       // myProperties.clear();
-       // myProperties.add(getAllProperitiesResponse.data[0]);
-       // for(int i=0;i<myProperties.length;i++){
-       //   myImgs.add(myProperties[i].image);
-       // }
-       // imageSliders=myImgs.map((element) => MyPropertyItem).cast<Widget>().toList();
-
-      }else {
-        Toast.show("there is no new surveys", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.TOP);
-        print("fom else not 200");
-      }
-
-    }on DioError catch (e) {
-        myProperties.clear();
-        print(e.error);
-        print(e.message);
-        Toast.show(e.message, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.TOP);
-    }
-  }
-
-
-
-
 
 
 

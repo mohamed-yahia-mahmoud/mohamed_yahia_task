@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-       con.dioGetNewProperties( context);
+       con.newRequestsMethod( context: context);
     });
     super.initState();
   }
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
               child: Stack(
                   children: [
                     CarouselSlider(
-                      items: imageSliders,
+                      items: con.imageSliders,
                       options: CarouselOptions(
                           autoPlay: true,
                           enlargeCenterPage: true,
