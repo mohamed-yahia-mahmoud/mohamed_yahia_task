@@ -5,14 +5,19 @@ import 'dart:convert';
 import 'dart:io';
 
 
- import 'package:flutter/foundation.dart';
+ import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
 import 'package:mobx/mobx.dart';
+import 'package:mohamed_yahia_task/components/MyPropertyItem.dart';
+import 'package:mohamed_yahia_task/network/model/PropertyModel.dart';
+import 'package:mohamed_yahia_task/network/response/GetAllProperitiesResponse.dart';
 
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:toast/toast.dart';
 
 part 'HomeMobx.g.dart';
 
@@ -21,7 +26,7 @@ class HomeController = HomeMobx with _$HomeController;
 
 abstract class HomeMobx with Store {
 
-  final url = "https://ecc-api.i-clinic.me/api";
+  final url = "https://staging28.justpack.app/justpack-rest-api/public/properties/list";
   final client = http.Client();
   final encoder = JsonEncoder.withIndent("  ");
 
@@ -47,6 +52,97 @@ abstract class HomeMobx with Store {
   @observable
   String name;
 
+  @observable
+  List<Widget> imageSliders =new List();
+
+
+  @observable
+  GetAllProperitiesResponse getAllProperitiesResponse;
+
+  @observable
+  var myProperties = ObservableList<ProperityModel>();
+
+  @observable
+  List<String> myImgs = new List();
+
+  @action
+  Future<GetAllProperitiesResponse> newRequestsMethod(
+      {  Function() doAfterSuccess, BuildContext context}) {
+
+    return client.get(url).then((http.Response response) {
+      try{
+        final data = json.decode(response.body);
+        getAllProperitiesResponse = GetAllProperitiesResponse.fromJson(data);
+
+          debugPrintSynchronously(encoder.convert(data));
+          myProperties.clear();
+          myProperties.addAll(getAllProperitiesResponse.data);
+        print('${myProperties}');
+
+        for(int i=0;i<myProperties.length;i++){
+          myImgs.add(myProperties[i].image);
+          print('${myProperties[i].image}');
+        }
+        imageSliders=myImgs.map((element) => MyPropertyItem).cast<Widget>().toList();
+
+
+
+      } on Exception catch (exception) {
+        print("my exception $exception");
+      } catch (error) {
+
+      }
+
+      return getAllProperitiesResponse;
+    });
+
+
+
+
+  }
+
+
+  @action
+  void getNewRequests({BuildContext context}) {
+
+    newRequestsMethod(
+        context: context,
+        doAfterSuccess: () {
+          myProperties.clear();
+          myProperties.addAll(getAllProperitiesResponse.data);
+        });
+
+  }
+
+
+  void dioGetNewProperties( BuildContext context)async{
+    try {
+      Dio dio = new Dio();
+      print("Get " + url );
+      var response = await dio.get(url);
+
+      if (response!=null&&response.statusCode==200)   {
+
+       print("my data  ${response.data}");
+       getAllProperitiesResponse = GetAllProperitiesResponse.fromJson(response.data);
+       print("my data  ${getAllProperitiesResponse.data}");
+       myProperties.clear();
+       myProperties.addAll(getAllProperitiesResponse.data);
+       for(int i=0;i<myProperties.length;i++){
+         myImgs.add(myProperties[i].image);
+       }
+       imageSliders=myImgs.map((element) => MyPropertyItem).cast<Widget>().toList();
+
+      }else {
+        Toast.show("there is no new surveys", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.TOP);
+        print("fom else not 200");
+      }
+
+    }on DioError catch (e) {
+        myProperties.clear();
+        Toast.show(e.message, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.TOP);
+    }
+  }
 
 
 
