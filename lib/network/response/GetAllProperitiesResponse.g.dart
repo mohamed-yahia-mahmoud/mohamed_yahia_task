@@ -9,15 +9,16 @@ part of 'GetAllProperitiesResponse.dart';
 GetAllProperitiesResponse _$GetAllProperitiesResponseFromJson(
     Map<String, dynamic> json) {
   return GetAllProperitiesResponse(
-     data: (json['data'] as List)
-        ?.map((e) =>
-            e == null ? null : ProperityModel.fromJson(e as Map<String, dynamic>))
+    data: (json['data'] as List)
+        ?.map((e) => e == null
+            ? null
+            : ProperityModel.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-   );
+  );
 }
 
 Map<String, dynamic> _$GetAllProperitiesResponseToJson(
-    GetAllProperitiesResponse instance) =>
+        GetAllProperitiesResponse instance) =>
     <String, dynamic>{
-       'data': instance.data,
-     };
+      'data': instance.data,
+    };

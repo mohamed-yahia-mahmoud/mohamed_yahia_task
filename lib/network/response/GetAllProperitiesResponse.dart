@@ -7,7 +7,7 @@ part 'GetAllProperitiesResponse.g.dart';
 @JsonSerializable()
 class GetAllProperitiesResponse{
 
-   List<ProperityModel> data=new List<ProperityModel>();
+   List<ProperityModel> data ;
 
 
    GetAllProperitiesResponse({
@@ -15,8 +15,7 @@ class GetAllProperitiesResponse{
    });
 
 
-  factory GetAllProperitiesResponse.fromJson(Map<String, dynamic> json) =>
-      _$GetAllProperitiesResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$GetAllProperitiesResponseToJson(this);
+  factory GetAllProperitiesResponse.fromJson(var json) => _$GetAllProperitiesResponseFromJson(json);
+  Map<String,dynamic> toJson() => _$GetAllProperitiesResponseToJson(this);
 
 }

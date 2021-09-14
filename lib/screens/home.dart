@@ -1,7 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mohamed_yahia_task/mobx/HomeMobx.dart';
+ import 'package:mohamed_yahia_task/mobx/HomeMobx.dart';
+import 'package:mohamed_yahia_task/screens/Details.dart';
 import 'package:provider/provider.dart';
 
  final List<String> imgList = [
@@ -28,51 +29,6 @@ class _HomeState extends State<Home> {
   int index=0;
 
   HomeMobx con;
-/*
-  final List<Widget> imageSliders =  imgList.map((item) => Container(
-    child: Container(
-      height: 800,
-      margin: EdgeInsets.all(5.0),
-      child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          child: Stack(
-            children: <Widget>[
-              Image.network(item, fit: BoxFit.cover, width: 1000.0),
-              Positioned(
-                top: 0.0,
-                left: 0.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(13),
-
-                    ),
-                    //padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal:8.0,vertical: 3),
-                      child: Text(
-                        'AVAILABLE',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-
-
-            ],
-          )
-      ),
-    ),
-  )).toList();
-*/
 
 
 
@@ -81,7 +37,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-       con.getNewRequests(context: context);
+       con.dioGetNewProperties( context);
     });
     super.initState();
   }
@@ -133,47 +89,53 @@ class _HomeState extends State<Home> {
 
 
             /// the card and its content
-            Stack(
-                children: [
-                  CarouselSlider(
-                    items: con.imageSliders,
-                    options: CarouselOptions(
-                        autoPlay: true,
-                        enlargeCenterPage: true,
-                        aspectRatio: 2.0,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            con.current =  index;
-                          });
-                        }
+            InkWell(
+              onTap: (){
+
+                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Details()));
+              },
+              child: Stack(
+                  children: [
+                    CarouselSlider(
+                      items: imageSliders,
+                      options: CarouselOptions(
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          aspectRatio: 2.0,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              con.current =  index;
+                            });
+                          }
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 0.0,
-                    left: 0.0,
-                    right: 0.0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: imgList.map((url) {
-                         index = imgList.indexOf(url);
-                        return Container(
-                          width: 8.0,
-                          height: 8.0,
-                          margin: EdgeInsets.symmetric(vertical: 10.0,
-                              horizontal: 2.0),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: con.current ==  index
-                                ? Colors.green
-                                : Colors.white,
-                          ),
-                        );
-                      }).toList(),
+                    Positioned(
+                      bottom: 0.0,
+                      left: 0.0,
+                      right: 0.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: imgList.map((url) {
+                           index = imgList.indexOf(url);
+                          return Container(
+                            width: 8.0,
+                            height: 8.0,
+                            margin: EdgeInsets.symmetric(vertical: 10.0,
+                                horizontal: 2.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: con.current ==  index
+                                  ? Colors.green
+                                  : Colors.white,
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
-                  ),
 
 
-                ]
+                  ]
+              ),
             ),
 
             /// the name of each flat under the card
@@ -260,7 +222,7 @@ class _HomeState extends State<Home> {
             ),
 
 
-            /// num of each bedroom and bathroom in any flat
+            /// price per night
 
             Padding(
               padding: const EdgeInsets.only(left: 40.0,top: 10),
@@ -319,7 +281,6 @@ class _HomeState extends State<Home> {
 
 }
 
-/*
 final List<Widget> imageSliders =  imgList.map((item) => Container(
   child: Container(
     height: 800,
@@ -363,4 +324,3 @@ final List<Widget> imageSliders =  imgList.map((item) => Container(
     ),
   ),
 )).toList();
-*/

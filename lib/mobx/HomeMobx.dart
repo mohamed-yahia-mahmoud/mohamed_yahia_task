@@ -33,7 +33,7 @@ abstract class HomeMobx with Store {
 
 
   @observable
-  final List<String> imgList = [
+   List<String> imgList = [
     'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
     'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
     'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
@@ -57,26 +57,26 @@ abstract class HomeMobx with Store {
 
 
   @observable
-  GetAllProperitiesResponse getAllProperitiesResponse;
+   GetAllProperitiesResponse  getAllProperitiesResponse;
 
   @observable
   var myProperties = ObservableList<ProperityModel>();
 
   @observable
   List<String> myImgs = new List();
-
+/*
   @action
   Future<GetAllProperitiesResponse> newRequestsMethod(
       {  Function() doAfterSuccess, BuildContext context}) {
 
     return client.get(url).then((http.Response response) {
-      try{
+     try{
         final data = json.decode(response.body);
-        getAllProperitiesResponse = GetAllProperitiesResponse.fromJson(data);
+        getAllProperitiesResponse[0] = GetAllProperitiesResponse.fromJson(data);
 
           debugPrintSynchronously(encoder.convert(data));
           myProperties.clear();
-          myProperties.addAll(getAllProperitiesResponse.data);
+          myProperties.addAll(getAllProperitiesResponse[0].data);
         print('${myProperties}');
 
         for(int i=0;i<myProperties.length;i++){
@@ -93,13 +93,14 @@ abstract class HomeMobx with Store {
 
       }
 
-      return getAllProperitiesResponse;
+      return getAllProperitiesResponse[0];
     });
 
 
 
 
   }
+
 
 
   @action
@@ -113,7 +114,7 @@ abstract class HomeMobx with Store {
         });
 
   }
-
+*/
 
   void dioGetNewProperties( BuildContext context)async{
     try {
@@ -123,15 +124,17 @@ abstract class HomeMobx with Store {
 
       if (response!=null&&response.statusCode==200)   {
 
-       print("my data  ${response.data}");
-       getAllProperitiesResponse = GetAllProperitiesResponse.fromJson(response.data);
-       print("my data  ${getAllProperitiesResponse.data}");
-       myProperties.clear();
-       myProperties.addAll(getAllProperitiesResponse.data);
-       for(int i=0;i<myProperties.length;i++){
-         myImgs.add(myProperties[i].image);
-       }
-       imageSliders=myImgs.map((element) => MyPropertyItem).cast<Widget>().toList();
+       print("my data  ${response.data }");
+      getAllProperitiesResponse  = GetAllProperitiesResponse.fromJson(response.data);
+      // myProperties  = GetAllProperitiesResponse.fromJson(response.data[0]);
+
+       print("my data  ${getAllProperitiesResponse .data}");
+       // myProperties.clear();
+       // myProperties.add(getAllProperitiesResponse.data[0]);
+       // for(int i=0;i<myProperties.length;i++){
+       //   myImgs.add(myProperties[i].image);
+       // }
+       // imageSliders=myImgs.map((element) => MyPropertyItem).cast<Widget>().toList();
 
       }else {
         Toast.show("there is no new surveys", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.TOP);
@@ -140,9 +143,12 @@ abstract class HomeMobx with Store {
 
     }on DioError catch (e) {
         myProperties.clear();
+        print(e.error);
+        print(e.message);
         Toast.show(e.message, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.TOP);
     }
   }
+
 
 
 

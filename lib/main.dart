@@ -1,37 +1,18 @@
-/* import 'package:flutter/material.dart';
-
-import 'HomeScreen.dart';
-import 'home.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        primarySwatch: Colors.blue,
-      ),
-      home: Home(),
-    );
-  }
-}*/
-
-
-
 
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'file:///H:/Android%20projects/mohamed_yahia_task/lib/screens/home.dart';
-import 'package:mohamed_yahia_task/mobx/HomeMobx.dart';
+ import 'package:mohamed_yahia_task/mobx/HomeMobx.dart';
+import 'package:mohamed_yahia_task/screens/home.dart';
 import 'package:provider/provider.dart';
+
+import 'calendar/airfare.dart';
+
+class RIKeys {
+  static final riKey1 = const Key('__RIKEY1__');
+  static final riKey2 = const Key('__RIKEY2__');
+  static final riKey3 = const Key('__RIKEY3__');
+}
 
 Future<void> main()  {
   HttpOverrides.global = new MyHttpOverrides();
@@ -72,7 +53,7 @@ class _MyAppState extends State<MyApp> {
 
 
           // for testing ocr call MyHomePage
-          home: new  Home() ,
+          home: new Home() /*AirFareCalendar( ) */,
           navigatorKey: navigatorKey,
 
         )
@@ -89,3 +70,4 @@ class MyHttpOverrides extends HttpOverrides{
       ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
+
