@@ -11,18 +11,7 @@ part of 'HomeMobx.dart';
 mixin _$HomeController on HomeMobx, Store {
   final _$imgListAtom = Atom(name: 'HomeMobx.imgList');
 
-  @override
-  List<String> get imgList {
-    _$imgListAtom.reportRead();
-    return super.imgList;
-  }
 
-  @override
-  set imgList(List<String> value) {
-    _$imgListAtom.reportWrite(value, super.imgList, () {
-      super.imgList = value;
-    });
-  }
 
   final _$currentAtom = Atom(name: 'HomeMobx.current');
 
@@ -134,7 +123,7 @@ mixin _$HomeController on HomeMobx, Store {
   @override
   String toString() {
     return '''
-imgList: ${imgList},
+ 
 current: ${current},
 index: ${index},
 name: ${name},

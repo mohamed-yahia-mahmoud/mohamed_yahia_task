@@ -12,11 +12,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:mobx/mobx.dart';
+import 'package:mohamed_yahia_task/calendar/airfare.dart';
 import 'package:mohamed_yahia_task/components/MyPropertyItem.dart';
 import 'package:mohamed_yahia_task/network/model/PropertyModel.dart';
 import 'package:mohamed_yahia_task/network/response/GetAllProperitiesResponse.dart';
 
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:toast/toast.dart';
 
 part 'HomeMobx.g.dart';
@@ -32,15 +34,7 @@ abstract class HomeMobx with Store {
 
 
 
-  @observable
-   List<String> imgList = [
-    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
-  ];
+
 
 
   @observable
@@ -53,8 +47,35 @@ abstract class HomeMobx with Store {
   String name;
 
   @observable
-  List<Widget> imageSliders =new List();
+  bool checkInTapped=false;
 
+  @observable
+  bool checkOutTapped=false;
+
+  @observable
+  bool isStartDay=false;
+
+  @observable
+  bool isEndDay=false;
+
+  @observable
+  DateTime startDate;
+
+  @observable
+  DateTime endDate;
+
+  @observable
+  int amount;
+
+  @observable
+  CalendarController controller2;
+
+  @observable
+  List<Widget> imageSliders;
+  @observable
+  DateTime minDate = DateTime(2021,10,1);
+  @observable
+  DateTime maxDate=DateTime(2021,11,30);
 
   @observable
    GetAllProperitiesResponse  getAllProperitiesResponse;
@@ -64,6 +85,10 @@ abstract class HomeMobx with Store {
 
   @observable
   List<String> myImgs = new List();
+  @observable
+  List<String> fares = <String>[];
+  @observable
+  List<AirFare> airFareDataCollection = <AirFare>[];
 
   @action
   Future<GetAllProperitiesResponse> newRequestsMethod(
@@ -73,26 +98,19 @@ abstract class HomeMobx with Store {
      try{
         final data = json.decode(response.body);
         getAllProperitiesResponse  = GetAllProperitiesResponse.fromJson(data);
-
-          debugPrintSynchronously(encoder.convert(data));
+          //debugPrintSynchronously(encoder.convert(data));
           myProperties.clear();
           myProperties.addAll(getAllProperitiesResponse .data);
-        print('yesss ${myProperties}');
 
         for(int i=0;i<myProperties.length;i++){
           myImgs.add(myProperties[i].image);
-          print('my images ${myProperties[i].image}');
         }
         imageSliders=myImgs.map((element) => MyPropertyItem).cast<Widget>().toList();
-
-
 
       } on Exception catch (exception) {
         print("my exception $exception");
       } catch (error) {
-
       }
-
       return getAllProperitiesResponse ;
     });
 
@@ -100,19 +118,97 @@ abstract class HomeMobx with Store {
 
 
 
+  /// Creates required data for the air fare data.
   @action
-  void getNewRequests({BuildContext context}) {
+  void addFareDataDetails() {
+      fares.clear();
 
-    newRequestsMethod(
-        context: context,
-        doAfterSuccess: () {
-          myProperties.clear();
-          myProperties.addAll(getAllProperitiesResponse.data);
-        });
+      fares.add( myProperties[current].prices.i10_01_2021.toString());
+      fares.add( myProperties[current].prices.i10022021.toString());
+      fares.add( myProperties[current].prices.i10032021.toString());
+      fares.add( myProperties[current].prices.i10042021.toString());
+      fares.add( myProperties[current].prices.i10052021.toString());
+      fares.add( myProperties[current].prices.i10062021.toString());
+      fares.add( myProperties[current].prices.i10072021.toString());
+      fares.add( myProperties[current].prices.i10082021.toString());
+      fares.add( myProperties[current].prices.i10092021.toString());
+      fares.add( myProperties[current].prices.i10102021.toString());
+      fares.add( myProperties[current].prices.i10112021.toString());
+      fares.add( myProperties[current].prices.i10122021.toString());
+      fares.add( myProperties[current].prices.i10132021.toString());
+      fares.add( myProperties[current].prices.i10142021.toString());
+      fares.add( myProperties[current].prices.i10152021.toString());
+      fares.add( myProperties[current].prices.i10162021.toString());
+      fares.add( myProperties[current].prices.i10172021.toString());
+      fares.add( myProperties[current].prices.i10182021.toString());
+      fares.add( myProperties[current].prices.i10192021.toString());
+      fares.add( myProperties[current].prices.i10202021.toString());
+      fares.add( myProperties[current].prices.i10212021.toString());
+      fares.add( myProperties[current].prices.i10222021.toString());
+      fares.add( myProperties[current].prices.i10232021.toString());
+      fares.add( myProperties[current].prices.i10242021.toString());
+      fares.add( myProperties[current].prices.i10252021.toString());
+      fares.add( myProperties[current].prices.i10262021.toString());
+      fares.add( myProperties[current].prices.i10272021.toString());
+      fares.add( myProperties[current].prices.i10282021.toString());
+      fares.add( myProperties[current].prices.i10292021.toString());
+      fares.add( myProperties[current].prices.i10302021.toString());
+      fares.add( myProperties[current].prices.i10312021.toString());
+
+      fares.add( myProperties[current].prices.i11022021.toString());
+      fares.add( myProperties[current].prices.i11022021.toString());
+      fares.add( myProperties[current].prices.i11032021.toString());
+      fares.add( myProperties[current].prices.i11042021.toString());
+      fares.add( myProperties[current].prices.i11052021.toString());
+      fares.add( myProperties[current].prices.i11062021.toString());
+      fares.add( myProperties[current].prices.i11072021.toString());
+      fares.add( myProperties[current].prices.i11082021.toString());
+      fares.add( myProperties[current].prices.i11092021.toString());
+      fares.add( myProperties[current].prices.i11102021.toString());
+      fares.add( myProperties[current].prices.i11112021.toString());
+      fares.add( myProperties[current].prices.i11122021.toString());
+      fares.add( myProperties[current].prices.i11132021.toString());
+      fares.add( myProperties[current].prices.i11142021.toString());
+      fares.add( myProperties[current].prices.i11152021.toString());
+      fares.add( myProperties[current].prices.i11162021.toString());
+      fares.add( myProperties[current].prices.i11172021.toString());
+      fares.add( myProperties[current].prices.i11182021.toString());
+      fares.add( myProperties[current].prices.i11192021.toString());
+      fares.add( myProperties[current].prices.i11202021.toString());
+      fares.add( myProperties[current].prices.i11212021.toString());
+      fares.add( myProperties[current].prices.i11222021.toString());
+      fares.add( myProperties[current].prices.i11232021.toString());
+      fares.add( myProperties[current].prices.i11242021.toString());
+      fares.add( myProperties[current].prices.i11252021.toString());
+      fares.add( myProperties[current].prices.i11262021.toString());
+      fares.add( myProperties[current].prices.i11272021.toString());
+      fares.add( myProperties[current].prices.i11282021.toString());
+      fares.add( myProperties[current].prices.i11292021.toString());
+      fares.add( myProperties[current].prices.i11302021.toString());
 
   }
 
+  /// Creates the air fare data with required information
+  @action
+  void addAirFareData() {
+    airFareDataCollection = <AirFare>[];
+    for (int i = 0; i < 61; i++) {
+      String fare = fares[i];
+      airFareDataCollection.add(AirFare(fare));
+    }
+  }
 
 
+  @action
+  void calcAmount() {
+      amount=0;
+      int start= (61-(maxDate.difference(startDate).inDays.toInt())-1) ;
+      int end = (61-(maxDate.difference(endDate).inDays.toInt()));
+
+    for (int i = start; i < end; i++) {
+       amount+=int.parse(fares[i]);
+       print(fares[i]);
+     }
+  }
 
 }

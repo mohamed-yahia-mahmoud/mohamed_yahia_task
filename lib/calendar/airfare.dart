@@ -3,7 +3,10 @@ import 'dart:math';
 
 ///Package imports
 import 'package:flutter/material.dart';
+import 'package:mohamed_yahia_task/mobx/HomeMobx.dart';
 import 'package:mohamed_yahia_task/model/sample_view.dart';
+import 'package:mohamed_yahia_task/screens/Details.dart';
+import 'package:provider/provider.dart';
 
 ///calendar import
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -11,15 +14,11 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 /// core import
 import 'package:syncfusion_flutter_core/core.dart';
 
-///Local import
-
 /// Smallest fare value
 const String _kBestPrice = r'$100.17';
 
 /// Widget of air fare calendar
 class AirFareCalendar extends SampleView {
-  /// Creates default air fare calendar
-  //const AirFareCalendar(Key key) : super(key: key);
 
   @override
   _AirFareCalendarCalendarState createState() =>
@@ -27,13 +26,19 @@ class AirFareCalendar extends SampleView {
 }
 
 class _AirFareCalendarCalendarState extends SampleViewState {
-  _AirFareCalendarCalendarState();
 
-  final ScrollController _controller = ScrollController();
-  List<AirFare> _airFareDataCollection = <AirFare>[];
-  final List<int> _airlineId = <int>[1, 2, 3, 4];
-  final List<String> _fares = <String>[];
-  final DateTime _minDate = DateTime.now();
+  final VoidCallback onPressed;
+
+  _AirFareCalendarCalendarState({
+     this.onPressed,
+   });
+
+  HomeMobx con;
+
+   CalendarController _controller2;
+
+  final DateTime _minDate = DateTime(2021,10,1);
+  final DateTime _maxDate=DateTime(2021,11,30);
 
   /// Global key used to maintain the state, when we change the parent of the
   /// widget
@@ -43,75 +48,23 @@ class _AirFareCalendarCalendarState extends SampleViewState {
 
   @override
   void initState() {
-    _addFareDataDetails();
-    _addAirFareData();
-    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      con.controller2 = CalendarController();
+
+       con.addFareDataDetails();
+       con.addAirFareData();
+       setState(() {
+
+       });
+    });
+     super.initState();
   }
 
-  /// Creates required data for the air fare data.
-  void _addFareDataDetails() {
-    _fares.add(r'$134.50');
-    _fares.add(r'$305.00');
-    _fares.add(r'$152.66');
-    _fares.add(r'$267.09');
-    _fares.add(r'$189.20');
-    _fares.add(r'$212.10');
-    _fares.add(r'$350.50');
-    _fares.add(r'$222.39');
-    _fares.add(r'$238.83');
-    _fares.add(r'$147.27');
-    _fares.add(r'$115.43');
-    _fares.add(r'$198.06');
-    _fares.add(r'$189.83');
-    _fares.add(r'$110.71');
-    _fares.add(r'$152.10');
-    _fares.add(r'$199.62');
-    _fares.add(r'$146.15');
-    _fares.add(r'$237.04');
-    _fares.add(r'$100.17');
-    _fares.add(r'$101.72');
-    _fares.add(r'$266.69');
-    _fares.add(r'$332.48');
-    _fares.add(r'$256.77');
-    _fares.add(r'$449.68');
-    _fares.add(r'$100.17');
-    _fares.add(r'$153.31');
-    _fares.add(r'$249.92');
-    _fares.add(r'$254.59');
-    _fares.add(r'$332.48');
-    _fares.add(r'$256.77');
-    _fares.add(r'$449.68');
-    _fares.add(r'$107.18');
-    _fares.add(r'$219.04');
-  }
 
-  /// Returns color for the airplane data.
-  Color _getAirPlaneColor(int id) {
-    if (id == 1) {
-      return Colors.grey;
-    } else if (id == 2) {
-      return Colors.green;
-    } else {
-      return Colors.red;
-    }
-  }
 
-  /// Creates the air fare data with required information
-  void _addAirFareData() {
-    _airFareDataCollection = <AirFare>[];
-    for (int i = 0; i < 100; i++) {
-      int id = i % _airlineId.length;
-      if (id == 0) {
-        id = 1;
-      } else if (id > _airlineId.length) {
-        id -= 1;
-      }
-      final String fare = _fares[i % _fares.length];
-      final Color color = _getAirPlaneColor(id);
-      _airFareDataCollection
-          .add(AirFare(fare, color, 'Airways ' + id.toString()));
-    }
-  }
+
+
 
   @override
   @override
@@ -123,34 +76,22 @@ class _AirFareCalendarCalendarState extends SampleViewState {
 
   @override
   Widget build(BuildContext context) {
+
+    con=Provider.of<HomeMobx>(context);
+
     final Widget calendar = Theme(
 
         /// The key set here to maintain the state,
         ///  when we change the parent of the widget
         key: _globalKey,
-        data: ThemeData.light(),/*model.themeData.copyWith(accentColor: model.backgroundColor),*/
+        data: ThemeData.light(),
         child: _getAirFareCalendar());
 
     return Scaffold(
       body:
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Expanded(
-          child: (model.isWebFullView && _screenHeight < 800) ||
-                  _deviceOrientation == Orientation.landscape
-              ? Scrollbar(
-                  isAlwaysShown: true,
-                  controller: _controller,
-                  child: ListView(
-                    controller: _controller,
-                    children: <Widget>[
-                      Container(
-                        color: model.cardThemeColor,
-                        height: 600,
-                        child: calendar,
-                      )
-                    ],
-                  ))
-              : Container(color: model.cardThemeColor, child: calendar),
+          child: Container(color: model.cardThemeColor, child: calendar),
         )
       ]),
     );
@@ -161,51 +102,89 @@ class _AirFareCalendarCalendarState extends SampleViewState {
     return SfCalendar(
       showNavigationArrow: model.isWebFullView,
       view: CalendarView.month,
+      controller: con.controller2 ,
       monthCellBuilder: _monthCellBuilder,
-      showDatePickerButton: true,
+      showDatePickerButton: false,
       minDate: _minDate,
+      maxDate: _maxDate,
+     onTap: (CalendarTapDetails details){
+
+         DateTime date = details.date;
+         if(con.checkInTapped){
+
+             con.startDate=date;
+             print('start date  ${date.toString()}');
+             con.checkInTapped=false;
+             Navigator.pushReplacement(
+                 context,
+                 MaterialPageRoute(
+                     builder: (BuildContext context) => Details()));
+
+         }else if(con.checkOutTapped){
+
+             con.endDate=date;
+             print('start date  ${date.toString()}');
+             con.amount=0;
+             con.calcAmount();
+             con.checkOutTapped=false;
+             Navigator.pushReplacement(
+                 context,
+                 MaterialPageRoute(
+                     builder: (BuildContext context) => Details()));
+
+         }
+
+
+       },
     );
   }
 
   /// Returns the builder for month cell.
   Widget _monthCellBuilder(
       BuildContext buildContext, MonthCellDetails details) {
-    final Random random = Random();
+
 
     final bool isToday = isSameDate(details.date, DateTime.now());
-    final DateTime _endDate = DateTime.now().add(Duration(days: 8));
-    final bool isEndDay = isSameDate(details.date, _endDate);
-    final AirFare airFare = _airFareDataCollection[random.nextInt(100)];
+
+    final bool isStartDay = isSameDate(details.date, con.startDate);
+    final bool isEndDay = isSameDate(details.date, con.endDate);
+
+     final AirFare airFare = con.airFareDataCollection!=null&&con.airFareDataCollection.isNotEmpty?
+    details.date==_minDate?con.airFareDataCollection[1]:
+        details.date==_maxDate?con.airFareDataCollection[60  ]:
+            details.date.isAfter(_minDate)&& details.date.isBefore(_maxDate)?
+            con.airFareDataCollection[details.date.difference(_minDate).inDays]:
+            AirFare(''):AirFare('');
     final Color defaultColor =
         model.themeData != null && model.themeData.brightness == Brightness.dark
             ? Colors.white
             : Colors.black54;
-    final bool isBestPrice = airFare.fare == _kBestPrice;
-    final bool isDisabledDate =
-        details.date.isBefore(_minDate) && !isSameDate(details.date, _minDate);
+     final bool isDisabledDate =
+        details.date.isBefore(_minDate) || details.date.isAfter(_maxDate)&& !isSameDate(details.date, _minDate);
 
-    final bool isInPeriod = details.date.isBefore(_endDate) &&  !isToday && !isEndDay;
+    final bool isInPeriod =con.endDate!=null? details.date.isBefore(con.endDate) && details.date.isAfter(con.startDate)&& !con.isStartDay && !con.isEndDay:false;
 
     return Container(
-      decoration: isToday?BoxDecoration(
-        borderRadius: isToday? BorderRadius.only(topLeft: Radius.circular(25),bottomLeft:  Radius.circular(25) )
+      decoration:  isStartDay?BoxDecoration(
+        borderRadius:  isStartDay? BorderRadius.only(topLeft: Radius.circular(25),bottomLeft:  Radius.circular(25) )
             : null,
-          border: !isToday? Border(
+          border: ! isStartDay? Border(
             top: BorderSide(width: 0.1, color: defaultColor),
             left: BorderSide(width: 0.1, color: defaultColor),
           ):null,
           color: isDisabledDate
               ? Colors.grey.withOpacity(0.1)
-                  : isToday||isEndDay?Colors.green: isInPeriod?Colors.green.withOpacity(.4):null):
+                  :  isStartDay|| isEndDay&&!isInPeriod?Colors.green: isInPeriod?Colors.green.withOpacity(.4):null):
       BoxDecoration(
           borderRadius: isEndDay? BorderRadius.only(topRight: Radius.circular(25),bottomRight:  Radius.circular(25) ) :null,
-          border: !isEndDay? Border(
+          border: ! isEndDay? Border(
             top: BorderSide(width: 0.1, color: defaultColor),
             left: BorderSide(width: 0.1, color: defaultColor),
           ):null,
           color: isDisabledDate
               ? Colors.grey.withOpacity(0.1)
-              : isToday||isEndDay?Colors.green: isInPeriod?Colors.green.withOpacity(.4):null),
+              :  isStartDay|| isEndDay?Colors.green: isInPeriod?Colors.green.withOpacity(.4):null),
+
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -217,9 +196,7 @@ class _AirFareCalendarCalendarState extends SampleViewState {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: true
                   ? MainAxisAlignment.center
-                  : isBestPrice
-                      ? MainAxisAlignment.spaceBetween
-                      : MainAxisAlignment.start,
+                  : MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
@@ -280,14 +257,10 @@ class _AirFareCalendarCalendarState extends SampleViewState {
 /// Object to hold the air fare data.
 class AirFare {
   /// Holds the data of air fares
-  const AirFare(this.fare, this.color, this.airline);
+  const AirFare(this.fare,    );
 
   /// holds the string fare data
   final String fare;
 
-  /// Color of the fare
-  final Color color;
 
-  /// Holds string of airline
-  final String airline;
 }

@@ -39,7 +39,7 @@ class ProperityModel {
 }
 
 class Prices {
-  int i10012021;
+  int i10_01_2021;
   int i10022021;
   int i10032021;
   int i10042021;
@@ -102,7 +102,7 @@ class Prices {
   int i11302021;
 
   Prices(
-      {this.i10012021,
+      {this.i10_01_2021,
         this.i10022021,
         this.i10032021,
         this.i10042021,
@@ -165,7 +165,7 @@ class Prices {
         this.i11302021});
 
   Prices.fromJson(Map<String, dynamic> json) {
-    i10012021 = json['10/01/2021'];
+    i10_01_2021 = json['10/01/2021'];
     i10022021 = json['10/02/2021'];
     i10032021 = json['10/03/2021'];
     i10042021 = json['10/04/2021'];
@@ -230,7 +230,7 @@ class Prices {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['10/01/2021'] = this.i10012021;
+    data['10/01/2021'] = this.i10_01_2021;
     data['10/02/2021'] = this.i10022021;
     data['10/03/2021'] = this.i10032021;
     data['10/04/2021'] = this.i10042021;
