@@ -18,7 +18,7 @@ import 'package:syncfusion_flutter_core/core.dart';
 const String _kBestPrice = r'$100.17';
 
 /// Widget of air fare calendar
-class AirFareCalendar extends SampleView {
+class RentingCalendar extends SampleView {
 
   @override
   _AirFareCalendarCalendarState createState() =>
@@ -52,8 +52,8 @@ class _AirFareCalendarCalendarState extends SampleViewState {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       con.controller2 = CalendarController();
 
-       con.addFareDataDetails();
-       con.addAirFareData();
+       con.addFlatDataDetails();
+       con.addDayFlatData();
        setState(() {
 
        });
@@ -64,9 +64,6 @@ class _AirFareCalendarCalendarState extends SampleViewState {
 
 
 
-
-
-  @override
   @override
   void didChangeDependencies() {
     _deviceOrientation = MediaQuery.of(context).orientation;
@@ -115,6 +112,7 @@ class _AirFareCalendarCalendarState extends SampleViewState {
              con.startDate=date;
              print('start date  ${date.toString()}');
              con.checkInTapped=false;
+             con.addCheckInDate=true;
              Navigator.pushReplacement(
                  context,
                  MaterialPageRoute(
@@ -127,6 +125,7 @@ class _AirFareCalendarCalendarState extends SampleViewState {
              con.amount=0;
              con.calcAmount();
              con.checkOutTapped=false;
+             con.addCheckOutDate=true;
              Navigator.pushReplacement(
                  context,
                  MaterialPageRoute(
@@ -227,27 +226,7 @@ class _AirFareCalendarCalendarState extends SampleViewState {
                 color: const Color.fromRGBO(42, 138, 148, 1),
                 fontWeight: FontWeight.bold),
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   mainAxisSize: MainAxisSize.max,
-          //   children: <Widget>[
-          //     Transform.rotate(
-          //       angle: -pi / 4,
-          //       child: Text(
-          //         '\u2708',
-          //         style: TextStyle(
-          //             color: airFare.color,
-          //             fontFamily: 'Roboto',
-          //             fontSize: !model.isMobileResolution ? 20 : 14),
-          //         textAlign: TextAlign.center,
-          //       ),
-          //     ),
-          //     if (!model.isMobileResolution)
-          //       Text(airFare.airline)
-          //     else
-          //       const Text('')
-          //   ],
-          // )
+
         ],
       ),
     );

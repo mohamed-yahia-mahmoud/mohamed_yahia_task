@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mohamed_yahia_task/calendar/airfare.dart';
+import 'package:mohamed_yahia_task/calendar/RentingCalendar.dart';
 import 'package:mohamed_yahia_task/mobx/HomeMobx.dart';
 import 'package:provider/provider.dart';
-import 'package:toast/toast.dart';
-
-import 'home.dart';
 
 class Details extends StatefulWidget {
   const Details({key}) : super(key: key);
@@ -15,15 +12,13 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
-
-  HomeMobx con;
+   HomeMobx con;
 
   @override
   void initState() {
      WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        con.startDate!=null&&con.endDate!=null?con.calcAmount():print("");
-      });
+       });
     });
     super.initState();
   }
@@ -41,7 +36,8 @@ class _DetailsState extends State<Details> {
 
     return WillPopScope(
       onWillPop: ()  {
-        Navigator.pop(context);
+         return  Future<bool>.value(true);
+
       },
       child: Scaffold(
         body:
@@ -62,21 +58,38 @@ class _DetailsState extends State<Details> {
                                 onTap: () {
                                 setState(() {
                                     con.isStartDay=false;
+                                    con.addCheckInDate=false;
                                     con.checkInTapped=!con.checkInTapped;
-                                    Toast.show("pls select your Start date from calender by tapping the suitable date cell", context, duration: Toast.LENGTH_LONG, gravity:  Toast.TOP);
-                               });
+                                });
                                         },
-                                child: Container(
+                                /// if the start day is selected change the design to green
+                                child: con.addCheckInDate? Container(
                                   width: MediaQuery.of(context).size.width*.4,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
-                                    color: con.checkInTapped?Colors.green:Colors.white,
+                                    color: Colors.green ,
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Text(con.formatter(con.startDate), style: TextStyle(
+                                        color:  Colors.white , fontSize: 14,),),
+                                    ),
+                                  ),
+                                )
+
+                                /// if it doesn't selected make it white
+                                    : Container(
+                                  width: MediaQuery.of(context).size.width*.4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25),
+                                    color:  Colors.white,
                                   ),
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: Text("Check-In date", style: TextStyle(
-                                        color: con.checkInTapped?Colors.white:Colors.black.withOpacity(.7), fontSize: 14,),),
+                                        color:  Colors.black.withOpacity(.7), fontSize: 14,),),
                                     ),
                                   ),
                                 ),
@@ -86,22 +99,40 @@ class _DetailsState extends State<Details> {
                                 onTap: () {
                                  setState(() {
                                     con.isEndDay=false;
+                                    con.addCheckOutDate=false;
                                     con.checkOutTapped=!con.checkOutTapped;
-                                    Toast.show("pls select your End date from calender by tapping the suitable date cell", context, duration: Toast.LENGTH_LONG, gravity:  Toast.TOP);
-                                 });
+                                  });
 
                                 },
-                                child: Container(
+                                /// if the end day is selected change the design to green
+
+                                child: con.addCheckOutDate? Container(
                                   width: MediaQuery.of(context).size.width*.4,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
-                                    color: con.checkOutTapped?Colors.green:Colors.white,
+                                    color: Colors.green ,
                                   ),
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.all(10.0),
+                                      child: Text(con.formatter(con.endDate), style: TextStyle(
+                                        color:  Colors.white , fontSize: 14,),),
+                                    ),
+                                  ),
+                                )
+
+                                /// if it doesn't selected make it white
+                                    : Container(
+                                  width: MediaQuery.of(context).size.width*.4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25),
+                                    color:  Colors.white,
+                                ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
                                       child: Text("Check-Out date", style: TextStyle(
-                                        color: con.checkOutTapped?Colors.white:Colors.black.withOpacity(.7), fontSize: 14,),),
+                                        color:   Colors.black.withOpacity(.7), fontSize: 14,),),
                                     ),
                                   ),
                                 ),
@@ -111,25 +142,25 @@ class _DetailsState extends State<Details> {
                         ),
                       ),
 
+                      /// for adding some space between components
                       SizedBox(height: 10,),
-
-
 
                       /// custom calender
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             color: Colors.grey.withOpacity(.2),
                           ),
                           width:  MediaQuery.of(context).size.width*.9,
                           height:  MediaQuery.of(context).size.height*.6,
-                          child: AirFareCalendar( ) ,
+                          child: RentingCalendar( ) ,
                         ),
                       ),
 
+                      /// check if there is a specific period selected the number of nights,total cost and average
+                      /// per night will be appeared otherwise it will not be appeared
                       con.endDate!=null&&con.endDate!=null?
                       Column(
                         children: [
@@ -139,7 +170,7 @@ class _DetailsState extends State<Details> {
                               child: Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  '${con.endDate.difference(con.startDate).inDays} Nights ',//
+                                  '${con.endDate.difference(con.startDate).inDays} Nights ',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 16.0,
@@ -155,7 +186,7 @@ class _DetailsState extends State<Details> {
                               child: Container(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'Total amount ${con.amount} EGP',//
+                                  'Total amount ${con.amount} EGP',
                                   style: TextStyle(
                                     color: Colors.green.withOpacity(.7),
                                     fontSize: 14.0,
@@ -191,9 +222,6 @@ class _DetailsState extends State<Details> {
                           ),
                         ],
                       ):Container(),
-
-
-
 
                     ],
                   ),

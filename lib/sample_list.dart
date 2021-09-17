@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'calendar/airfare.dart';
+import 'calendar/RentingCalendar.dart';
 
 /// Contains the output widget of sample
 /// appropriate key and output widget mapped
@@ -11,7 +11,7 @@ Map<String, Function> getSampleWidget() {
 
     // Calendar Samples
 
-     'air_fare_calendar': (Key key) => AirFareCalendar(),
+     'air_fare_calendar': (Key key) => RentingCalendar(),
 
 
 

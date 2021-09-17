@@ -25,25 +25,34 @@ dependencies:
     sdk: flutter
 
 
+  # for showing images
   carousel_slider: ^3.0.0
+
+ # for using mobx design pattern
   provider: ^4.0.4
   json_annotation: ^3.0.0
   mobx: ^1.1.1
   flutter_mobx: ^1.1.0
   path_provider: ^1.6.5
   http: ^0.12.2
-  dio: ^3.0.0
-  toast: ^0.1.5
+
+  # for creating a custom calender based on our requirements
   syncfusion_flutter_calendar: ^18.4.49
+
+  # for changing date format and translation if we want
   intl: ^0.16.1
-#  get: ^3.26.0
-  # The following adds the Cupertino Icons font to your application.
+
+
+
+   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # for using mobx design pattern
   build_runner:
   json_serializable:
   mobx_codegen: ^1.1.0
@@ -63,6 +72,7 @@ flutter:
   assets:
     - assets/bathroom.png
     - assets/bedroom.png
+    - assets/jplogo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -4,9 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
  import 'package:mohamed_yahia_task/mobx/HomeMobx.dart';
 import 'package:mohamed_yahia_task/screens/home.dart';
+import 'package:mohamed_yahia_task/screens/intro/start_page.dart';
 import 'package:provider/provider.dart';
 
-import 'calendar/airfare.dart';
+import 'calendar/RentingCalendar.dart';
 
 class RIKeys {
   static final riKey1 = const Key('__RIKEY1__');
@@ -51,9 +52,7 @@ class _MyAppState extends State<MyApp> {
         child :  MaterialApp(
           debugShowCheckedModeBanner: false,
 
-
-          // for testing ocr call MyHomePage
-          home: new Home() /*AirFareCalendar( ) */,
+          home: new StartPage() ,
           navigatorKey: navigatorKey,
 
         )

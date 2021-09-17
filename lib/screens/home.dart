@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
- import 'package:mohamed_yahia_task/mobx/HomeMobx.dart';
+import 'package:mohamed_yahia_task/mobx/HomeMobx.dart';
 import 'package:mohamed_yahia_task/screens/Details.dart';
 import 'package:provider/provider.dart';
 
@@ -13,8 +12,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  @override
-  int _current = 0;
 
   int index=0;
 
@@ -25,10 +22,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     // TODO: implement initState
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
-      await con.newRequestsMethod( context: context);
-    });
     super.initState();
   }
 
@@ -42,13 +35,13 @@ class _HomeState extends State<Home> {
     con=Provider.of<HomeMobx>(context);
 
     final List<Widget> imageSliders =  con.myImgs.map((item) => Container(
-  child: Container(
-    height: 800,
-    margin: EdgeInsets.all(5.0),
-    child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-        child: Stack(
-          children: <Widget>[
+      child: Container(
+       height: 800,
+        margin: EdgeInsets.all(5.0),
+        child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+           child: Stack(
+            children: <Widget>[
             Image.network(item, fit: BoxFit.cover, width: 1000.0),
             Positioned(
               top: 0.0,
@@ -76,14 +69,11 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-
-
-
           ],
         )
+       ),
     ),
-  ),
-)).toList();
+    )).toList();
 
     return Scaffold(
       body:
@@ -101,7 +91,11 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                      con.days.add('the dates ${con.myProperties[con.current].prices}');
+                      print(con.myProperties[con.current].prices.i10_01_2021);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Details()));
+                      },
                       child: Text("Add Dates  ", style: TextStyle(
                         color: Colors.grey.withOpacity(.7), fontSize: 25,),),
                     ),
@@ -109,10 +103,13 @@ class _HomeState extends State<Home> {
                       color: Colors.grey.withOpacity(.2), fontSize: 25,)),
 
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        con.sortingEnabled=!con.sortingEnabled;
+                        con.sortingDescinding();
+                      },
                       child: Icon(
                         Icons.filter_alt,
-                        color: Colors.black.withOpacity(.8),
+                        color: con.sortingEnabled? Colors.black.withOpacity(.8): Colors.grey.withOpacity(.4),
                         size: 25,
                       ),
                     ),
@@ -125,7 +122,7 @@ class _HomeState extends State<Home> {
             /// the card and its content
             InkWell(
               onTap: (){
-                con.fares.add('the dates ${con.myProperties[con.current].prices}');
+                con.days.add('the dates ${con.myProperties[con.current].prices}');
                 print(con.myProperties[con.current].prices.i10_01_2021);
                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Details()));
               },
@@ -140,6 +137,8 @@ class _HomeState extends State<Home> {
                           onPageChanged: (index, reason) {
                             setState(() {
                               con.current =  index;
+                              con.addFlatDataDetails();
+                              con.addDayFlatData();
                             });
                           }
                       ),
@@ -271,8 +270,16 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.only( left:8.0,),
                         child: Container(
 
-                          child: Text(
-                            '${(con.current+474)*4} EGP ',
+                          child: con.startDate!=null&&con.endDate!=null? Text(
+                            '${(con.amount/con.endDate.difference(con.startDate).inDays).round()} EGP',
+                            style: TextStyle(
+                              color: Colors.green ,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ):
+                          Text(
+                            '-',
                             style: TextStyle(
                               color: Colors.green ,
                               fontSize: 16.0,
